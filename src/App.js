@@ -9,13 +9,28 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import InfoBox from "./components/InfoBox";
 import Map from "./Map";
-import Table from './components/Table';
+import Table from "./components/Table";
+import LineChart from "./components/LineChart";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
-  const [sortedCountriesByCases,setSortedCountriesByCases]=useState([]);
+  const [sortedCountriesByCases, setSortedCountriesByCases] = useState([]);
+  const [dataByDate, setDataByDate] = useState({});
+
+  //Data by date for Line Graph
+  useEffect(() => {
+    const getDailyData = async () => {
+      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=60")
+        .then((response) => response.json())
+        .then((data) => {
+          setDataByDate(data);
+          // console.log(dataByDate);
+        });
+    };
+    getDailyData();
+  }, []);
 
   //fetch global on page load
   //old api    https://covid19.mathdro.id/api
@@ -41,12 +56,10 @@ function App() {
           //   flag: country.countryInfo.flag,
           // }));
           setCountries(data);
-          const sortedData=[...data]; //Copying array
-          sortedData.sort((a,b)=>{
-            if(a.cases<b.cases)
-              return 1;
-            else
-            return -1;
+          const sortedData = [...data]; //Copying array
+          sortedData.sort((a, b) => {
+            if (a.cases < b.cases) return 1;
+            else return -1;
           });
           setCountries(data);
           setSortedCountriesByCases(sortedData);
@@ -55,12 +68,9 @@ function App() {
     getCountriesData();
   }, []);
 
-
   // useEffect(()=>{
-    
+
   // },[]);
-
-
 
   const onChange = async (event) => {
     const countryCode = event.target.value;
@@ -88,24 +98,39 @@ function App() {
             <Select variant="outlined" value={country} onChange={onChange}>
               <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem value={country.countryInfo.iso3}>{country.country}&nbsp;&nbsp; &nbsp;<img src={country.countryInfo.flag} width="25" height="16" /></MenuItem>
+                <MenuItem value={country.countryInfo.iso3}>
+                  {country.country}&nbsp;&nbsp; &nbsp;
+                  <img src={country.countryInfo.flag} width="25" height="16" />
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
         <div className="app_stat">
           <InfoBox
-            title="Coronavirus" total={countryInfo.cases} cases={countryInfo.todayCases}  ></InfoBox>
-          <InfoBox title="Recovered" total={countryInfo.recovered} cases={countryInfo.todayRecovered}></InfoBox>
-          <InfoBox title="Deaths" total={countryInfo.deaths} cases={countryInfo.todayDeaths}></InfoBox>
+            title="Coronavirus"
+            total={countryInfo.cases}
+            cases={countryInfo.todayCases}
+          ></InfoBox>
+          <InfoBox
+            title="Recovered"
+            total={countryInfo.recovered}
+            cases={countryInfo.todayRecovered}
+          ></InfoBox>
+          <InfoBox
+            title="Deaths"
+            total={countryInfo.deaths}
+            cases={countryInfo.todayDeaths}
+          ></InfoBox>
         </div>
         <Map />
       </div>
       <Card className="app_right">
         <CardContent>
           <h3>Live Cases by Country</h3>
-          <Table countriesData={sortedCountriesByCases}/>
+          <Table countriesData={sortedCountriesByCases} />
         </CardContent>
+        <LineChart dataByDate={dataByDate} />
       </Card>
     </div>
   );
