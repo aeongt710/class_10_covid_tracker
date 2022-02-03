@@ -32,6 +32,12 @@ jobs:
       - name: install chart js
         run: npm install --save react-chartjs-2 chart.js
         
+      - name: install react-map-gl-geocoder
+        run: npm install --save react-map-gl-geocoder
+        
+      - name: install react-map-gl-geocoder
+        run: npm install --save react-map-gl
+        
       - uses: borales/actions-yarn@v2.3.0
         with:
           cmd: install # will run `yarn install` command
