@@ -139,7 +139,7 @@ function App() {
         </div>
 
         {/* <Map center={mapCenter} zoom={mapZoom}></Map> */}
-          <CircleMap center={mapCenter} zoom={mapZoom}></CircleMap>
+          <CircleMap center={mapCenter} zoom={mapZoom}  list={sortedCountriesByCases}></CircleMap>
 
       </div>
       <Card className="app_right">
