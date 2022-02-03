@@ -20,6 +20,11 @@ body{
   .app_header_title{
     flex:0.9;
   }
+  .infoBox{
+    font-size: 60%;
+    width: 120px;
+  }
+
 }
 .app_left{
   flex:0.9;
