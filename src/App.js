@@ -8,9 +8,9 @@ import {
 import { useState, useEffect } from "react";
 import "./App.css";
 import InfoBox from "./components/InfoBox";
-import Map from "./Map";
 import Table from "./components/Table";
 import LineChart from "./components/LineChart";
+import CircleMap from "./components/CircleMap";
 
 
 
@@ -137,7 +137,10 @@ function App() {
             cases={countryInfo.todayDeaths}
           ></InfoBox>
         </div>
-        <Map center={mapCenter} zoom={mapZoom}></Map>
+
+        {/* <Map center={mapCenter} zoom={mapZoom}></Map> */}
+          <CircleMap center={mapCenter} zoom={mapZoom}></CircleMap>
+
       </div>
       <Card className="app_right">
         <CardContent>
