@@ -12,12 +12,19 @@ import Map from "./Map";
 import Table from "./components/Table";
 import LineChart from "./components/LineChart";
 
+
+
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [sortedCountriesByCases, setSortedCountriesByCases] = useState([]);
   const [dataByDate, setDataByDate] = useState({});
+
+  let [mapCenter, setMapCenter] = useState({lat: 30,lng: 70});
+  const [mapZoom, setMapZoom] = useState(5);
+
+
 
   //Data by date for Line Graph
   useEffect(() => {
@@ -86,6 +93,13 @@ function App() {
         setCountry(countryCode);
         // console.log("specific/all ",data);
         setCountryInfo(data);
+        // console.log([data.countryInfo.lat,data.countryInfo.long]);
+        if(url!=="https://disease.sh/v3/covid-19/all"){
+          const newCenter=[data.countryInfo.lat,data.countryInfo.long];
+          setMapCenter({lat : data.countryInfo.lat, lng: data.countryInfo.long});
+          setMapZoom(4);
+          console.log("Inside onchange  var, ",newCenter,"  global", mapCenter);
+        }
       });
   };
 
@@ -93,7 +107,7 @@ function App() {
     <div className="app">
       <div className="app_left">
         <div className="app_header">
-          <h1>COVID-19 Tracker</h1>
+          <h1 className="app_header_title">COVID-19 Tracker</h1>
           <FormControl className="app_dropdown">
             <Select variant="outlined" value={country} onChange={onChange}>
               <MenuItem value="worldwide">Worldwide</MenuItem>
@@ -108,7 +122,7 @@ function App() {
         </div>
         <div className="app_stat">
           <InfoBox
-            title="Coronavirus"
+            title="Cases"
             total={countryInfo.cases}
             cases={countryInfo.todayCases}
           ></InfoBox>
@@ -123,14 +137,17 @@ function App() {
             cases={countryInfo.todayDeaths}
           ></InfoBox>
         </div>
-        <Map />
+        <Map center={mapCenter} zoom={mapZoom}></Map>
       </div>
       <Card className="app_right">
         <CardContent>
           <h3>Live Cases by Country</h3>
           <Table countriesData={sortedCountriesByCases} />
         </CardContent>
-        <LineChart dataByDate={dataByDate} />
+        <CardContent>
+          <h3>Last 60 Days</h3>
+          <LineChart dataByDate={dataByDate} />
+        </CardContent>
       </Card>
     </div>
   );

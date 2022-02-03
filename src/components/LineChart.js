@@ -75,7 +75,6 @@ function LineChart({ dataByDate }) {
   };
   return (
     <div>
-      this is chart
       <Line data={data} options={options} />
     </div>
   );

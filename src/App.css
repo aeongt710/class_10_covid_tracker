@@ -6,12 +6,19 @@ body{
   background-color: #f5f6fa;
 }
 
+
+.infoBox{
+  width: 130px;
+}
 @media (max-width: 700px) {
   .app{
     flex-direction: column;
   }
   .app_left{
     padding-bottom: 20px;
+  }
+  .app_header_title{
+    flex:0.9;
   }
 }
 .app_left{
