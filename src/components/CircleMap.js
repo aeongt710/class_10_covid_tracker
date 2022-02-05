@@ -140,9 +140,9 @@ function CircleMap({ center, zoom, list }) {
               </div>
             </Popup>
           )}
-          {/* <GeolocateControl  /> */}
+          <GeolocateControl  />
         {/* <FullscreenControl/> */}
-        {/* <NavigationControl  /> */}
+        <NavigationControl  />
         {/* <ScaleControl  /> */}
         </ReactMapGL>
       </div>

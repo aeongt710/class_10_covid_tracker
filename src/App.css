@@ -19,10 +19,14 @@ body{
   }
   .app_header_title{
     flex:0.9;
+    margin-bottom: 12px;
   }
   .infoBox{
     font-size: 60%;
     width: 120px;
+  }
+  .app_header{
+    flex-direction: column;
   }
 
 }
