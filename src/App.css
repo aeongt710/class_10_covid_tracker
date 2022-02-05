@@ -28,7 +28,9 @@ body{
 }
 .app_left{
   flex:0.9;
+  height : 800px;
 }
+
 .app{
   display: flex;
   justify-content: space-evenly;

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactMapGL from "react-map-gl";
 import "./CircleMap.css";
-import "mapbox-gl/dist/mapbox-gl.css";
+// import "mapbox-gl/dist/mapbox-gl.css";
+import './mapOr.css';
 import {
   ScaleControl,
   Marker,
@@ -9,6 +10,7 @@ import {
   NavigationControl,
   FullscreenControl,
   GeolocateControl,
+  Layer
 } from "react-map-gl";
 import uuid from "react-uuid";
 import { useRef, useEffect, useState } from "react";
@@ -52,11 +54,12 @@ function CircleMap({ center, zoom, list }) {
   //     padding: "10px",
   //   };
 
-  //   const navStyle = {
-  //     top: 72,
-  //     left: 0,
-  //     padding: "10px",
-  //   };
+    const navStyle = {
+      top: 72,
+      left: 0,
+      padding: "10px",
+      backgroundColor: "green",
+    };
 
   //   const scaleControlStyle = {
   //     bottom: 36,
@@ -72,6 +75,7 @@ function CircleMap({ center, zoom, list }) {
     <Card className="asd">
       <div className="map">
         <ReactMapGL
+        
           {...viewport}
           onViewportChange={(nextViewport) => setViewport(nextViewport)}
           onClick={(e) => {
@@ -80,6 +84,7 @@ function CircleMap({ center, zoom, list }) {
           mapboxApiAccessToken="pk.eyJ1Ijoiam9udGF5eXciLCJhIjoiY2s4aXcwbnA0MGFqYjNscDZicm9haXA3cCJ9.rI3D6Y4ZETQnYukX9RCOow"
           width={"100%"}
           height={"100%"}
+          className="test"
           // mapStyle="mapbox://styles/mapbox/dark-v10"
         >
           {list.map((country) => (
@@ -135,10 +140,10 @@ function CircleMap({ center, zoom, list }) {
               </div>
             </Popup>
           )}
-          {/* <GeolocateControl style={geolocateStyle} />
-        <FullscreenControl />
-        <NavigationControl className="abc" />
-        <ScaleControl  /> */}
+          <GeolocateControl  />
+        {/* <FullscreenControl/> */}
+        <NavigationControl  />
+        {/* <ScaleControl  /> */}
         </ReactMapGL>
       </div>
     </Card>

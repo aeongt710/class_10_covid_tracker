@@ -1,9 +1,10 @@
 .table{
     margin-top: 12px;
     overflow: scroll;
-    height: 400px;
+    height: 500px;
     overflow-x: hidden;
     color: #6a5d5d;
+    margin-bottom: 10px;
 }
 
 .table tr:nth-of-type(even)

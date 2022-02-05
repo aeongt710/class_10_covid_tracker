@@ -4,6 +4,7 @@ import {
   Select,
   Card,
   CardContent,
+  Box,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import "./App.css";
@@ -11,8 +12,8 @@ import InfoBox from "./components/InfoBox";
 import Table from "./components/Table";
 import LineChart from "./components/LineChart";
 import CircleMap from "./components/CircleMap";
-
-
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -21,10 +22,8 @@ function App() {
   const [sortedCountriesByCases, setSortedCountriesByCases] = useState([]);
   const [dataByDate, setDataByDate] = useState({});
 
-  let [mapCenter, setMapCenter] = useState({lat: 30,lng: 70});
+  let [mapCenter, setMapCenter] = useState({ lat: 30, lng: 70 });
   const [mapZoom, setMapZoom] = useState(5);
-
-
 
   //Data by date for Line Graph
   useEffect(() => {
@@ -79,11 +78,12 @@ function App() {
 
   // },[]);
 
-  const onChange = async (event) => {
-    const countryCode = event.target.value;
+  const onChange = async (value) => {
+    const countryCode = value.countryInfo.iso3;
     setCountry(countryCode);
+    console.log("onchange",value)
     const url =
-      countryCode === "worldwide"
+      countryCode === "Global"
         ? "https://disease.sh/v3/covid-19/all"
         : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
     // console.log(url);
@@ -94,14 +94,25 @@ function App() {
         // console.log("specific/all ",data);
         setCountryInfo(data);
         // console.log([data.countryInfo.lat,data.countryInfo.long]);
-        if(url!=="https://disease.sh/v3/covid-19/all"){
-          const newCenter=[data.countryInfo.lat,data.countryInfo.long];
-          setMapCenter({lat : data.countryInfo.lat, lng: data.countryInfo.long});
+        if (url !== "https://disease.sh/v3/covid-19/all") {
+          const newCenter = [data.countryInfo.lat, data.countryInfo.long];
+          setMapCenter({
+            lat: data.countryInfo.lat,
+            lng: data.countryInfo.long,
+          });
           setMapZoom(4);
-          console.log("Inside onchange  var, ",newCenter,"  global", mapCenter);
+          console.log(
+            "Inside onchange  var, ",
+            newCenter,
+            "  global",
+            mapCenter
+          );
         }
       });
   };
+  const options = ["Option 1", "Option 2"];
+  const [value, setValue] = useState(options[0]);
+  const [inputValue, setInputValue] = useState("");
 
   return (
     <div className="app">
@@ -109,7 +120,7 @@ function App() {
         <div className="app_header">
           <h1 className="app_header_title">COVID-19 Tracker</h1>
           <FormControl className="app_dropdown">
-            <Select variant="outlined" value={country} onChange={onChange}>
+            {/* <Select variant="outlined" value={country} onChange={onChange}>
               <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
                 <MenuItem value={country.countryInfo.iso3}>
@@ -117,7 +128,54 @@ function App() {
                   <img src={country.countryInfo.flag} width="25" height="16" />
                 </MenuItem>
               ))}
-            </Select>
+            </Select> */}
+            <Autocomplete
+             id="asynchronous-demo"
+              sx={{ width: 300 }}
+              // value={countr)}
+              
+              options={[...[{country:"Global",countryInfo:{flag:"",iso3:"Global"},iso3:"Global" }],...countries]}
+              autoHighlight
+              // onChange={(event,newValue)=>{
+
+              // }}
+              onChange={(event, value) => {
+                console.log(value)
+                onChange(value);
+              }}
+              getOptionLabel={(option) => option.country}
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                  value={option?.countryInfo?.iso3}
+                >
+                  
+                  <img
+                    loading="lazy"
+                    width="20"
+                    src={option?.countryInfo?.flag}
+                    srcSet={option?.countryInfo?.flag}
+                    alt=""
+                  />
+                  {option?.country}
+                  {/* ({option.code}) +{option.phone} */}
+                </Box>
+              )}
+              
+              
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Choose a country"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password", // disable autocomplete and autofill
+                  }}
+                />
+              )}
+            />
           </FormControl>
         </div>
         <div className="app_stat">
@@ -139,8 +197,11 @@ function App() {
         </div>
 
         {/* <Map center={mapCenter} zoom={mapZoom}></Map> */}
-          <CircleMap center={mapCenter} zoom={mapZoom}  list={sortedCountriesByCases}></CircleMap>
-
+        <CircleMap
+          center={mapCenter}
+          zoom={mapZoom}
+          list={sortedCountriesByCases}
+        ></CircleMap>
       </div>
       <Card className="app_right">
         <CardContent>
